@@ -1,0 +1,19 @@
+name: pull-request
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.head_ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: lint and typecheck
+        uses: ./.github/workflows/_reusable-eslint-tsc.yml
