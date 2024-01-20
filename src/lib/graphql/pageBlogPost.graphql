@@ -5,9 +5,6 @@ fragment ReferencePageBlogPostFields on PageBlogPost {
     spaceId
   }
   slug
-  author {
-    ...AuthorFields
-  }
   publishedDate
   title
   shortDescription
@@ -27,9 +24,6 @@ fragment PageBlogPostFields on PageBlogPost {
     ...SeoFields
   }
   slug
-  author {
-    ...AuthorFields
-  }
   publishedDate
   title
   shortDescription

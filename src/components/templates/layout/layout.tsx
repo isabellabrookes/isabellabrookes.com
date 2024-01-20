@@ -5,14 +5,15 @@ import { Header } from '../header';
 
 interface LayoutPropsInterface {
   children: ReactNode;
+  mainNavigation: any;
 }
 
-export const Layout = ({ children }: LayoutPropsInterface) => {
+export const Layout = ({ mainNavigation, children }: LayoutPropsInterface) => {
   return (
     <>
-      <Header />
+      <Header mainNavigation={mainNavigation} />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

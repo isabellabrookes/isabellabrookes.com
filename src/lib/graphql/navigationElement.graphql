@@ -1,0 +1,20 @@
+fragment navigationElementFields on NavigationElement {
+  __typename
+  sys {
+    id
+    spaceId
+  }
+  label
+  link
+  # subNavigationElementCollection(limit: 100, locale: $locale) {
+  #   items {
+  #     __typename
+  #     sys {
+  #       id
+  #       spaceId
+  #     }
+  #     label
+  #     link
+  #   }
+  # }
+}

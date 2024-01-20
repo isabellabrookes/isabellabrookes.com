@@ -2,13 +2,12 @@ import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useTranslation } from 'next-i18next';
 
-import { getServerSideTranslations } from './utils/get-serverside-translations';
-
 import { ArticleContent, ArticleHero, ArticleTileGrid } from '@src/components/features/article';
 import { SeoFields } from '@src/components/features/seo';
 import { Container } from '@src/components/shared/container';
 import { client, previewClient } from '@src/lib/client';
 import { revalidateDuration } from '@src/pages/utils/constants';
+import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
 
 const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { t } = useTranslation();
@@ -48,15 +47,11 @@ export const getStaticProps: GetStaticProps = async ({ params, locale, draftMode
   const gqlClient = preview ? previewClient : client;
 
   try {
-    const [blogPageData, landingPageData] = await Promise.all([
+    const [blogPageData] = await Promise.all([
       gqlClient.pageBlogPost({ slug: params.slug.toString(), locale, preview }),
-      gqlClient.pageLanding({ locale, preview }),
     ]);
 
     const blogPost = blogPageData.pageBlogPostCollection?.items[0];
-    const landingPage = landingPageData.pageLandingCollection?.items[0];
-
-    const isFeatured = landingPage?.featuredBlogPost?.slug === blogPost?.slug;
 
     if (!blogPost) {
       return {
@@ -71,7 +66,6 @@ export const getStaticProps: GetStaticProps = async ({ params, locale, draftMode
         ...(await getServerSideTranslations(locale)),
         previewActive: !!preview,
         blogPost,
-        isFeatured,
       },
     };
   } catch {

@@ -7,15 +7,9 @@
     "latestArticles": "Latest articles"
   },
   "common": {
-    "regionalSettings": "Regional Settings",
-    "homepage": "Homepage",
-    "language": "Language",
-    "languageDrawer": "Toggle language drawer"
-  },
-  "footer": {
-    "aboutUs": "about us",
-    "description": "Our company specialises in the development of advanced technologies for a wide range of industries. We use cutting-edge techniques and algorithms to create intelligent systems that can help businesses automate tasks, improve efficiency, and drive innovation.",
-    "powerBy": "Powered by"
+    "homepage": {
+      "title": "Isabella Brookes"
+    }
   },
   "notFound": {
     "title": "Page not found",

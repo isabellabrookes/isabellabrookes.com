@@ -1,45 +1,26 @@
 import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { useTranslation } from 'next-i18next';
-import Link from 'next/link';
 
-import { getServerSideTranslations } from './utils/get-serverside-translations';
-
-import { ArticleHero, ArticleTileGrid } from '@src/components/features/article';
+import { CtfRichText } from '@src/components/features/contentful';
 import { SeoFields } from '@src/components/features/seo';
 import { Container } from '@src/components/shared/container';
-import { PageBlogPostOrder } from '@src/lib/__generated/sdk';
+import { Layout } from '@src/components/templates/layout';
 import { client, previewClient } from '@src/lib/client';
 import { revalidateDuration } from '@src/pages/utils/constants';
+import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
 
 const Page = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { t } = useTranslation();
-
   const page = useContentfulLiveUpdates(props.page);
-  const posts = useContentfulLiveUpdates(props.posts);
-
-  if (!page?.featuredBlogPost || !posts) return;
+  const mainNavigation = useContentfulLiveUpdates(props.mainNavigation);
 
   return (
-    <>
+    <Layout mainNavigation={mainNavigation}>
       {page.seoFields && <SeoFields {...page.seoFields} />}
       <Container>
-        <Link href={`/${page.featuredBlogPost.slug}`}>
-          <ArticleHero article={page.featuredBlogPost} />
-        </Link>
+        <CtfRichText json={page.content.json} links={page.links} />
       </Container>
-
-      {/* Tutorial: contentful-and-the-starter-template.md */}
-      {/* Uncomment the line below to make the Greeting field available to render */}
-      {/*<Container>*/}
-      {/*  <div className="p-5 my-5 bg-colorTextLightest text-colorBlueLightest">{page.greeting}</div>*/}
-      {/*</Container>*/}
-
-      <Container className="my-8 md:mb-10 lg:mb-16">
-        <h2 className="mb-4 md:mb-6">{t('landingPage.latestArticles')}</h2>
-        <ArticleTileGrid className="md:grid-cols-2 lg:grid-cols-3" articles={posts} />
-      </Container>
-    </>
+      <Container>THIS IS ANOTHER CONTAINER</Container>
+    </Layout>
   );
 };
 
@@ -50,16 +31,8 @@ export const getStaticProps: GetStaticProps = async ({ locale, draftMode: previe
     const landingPageData = await gqlClient.pageLanding({ locale, preview });
     const page = landingPageData.pageLandingCollection?.items[0];
 
-    const blogPostsData = await gqlClient.pageBlogPostCollection({
-      limit: 6,
-      locale,
-      order: PageBlogPostOrder.PublishedDateDesc,
-      where: {
-        slug_not: page?.featuredBlogPost?.slug,
-      },
-      preview,
-    });
-    const posts = blogPostsData.pageBlogPostCollection?.items;
+    const mainNaigationData = await gqlClient.mainNavigation({ locale, preview });
+    const mainNavigation = mainNaigationData.mainNavigationCollection?.items[0];
 
     if (!page) {
       return {
@@ -74,7 +47,7 @@ export const getStaticProps: GetStaticProps = async ({ locale, draftMode: previe
         previewActive: !!preview,
         ...(await getServerSideTranslations(locale)),
         page,
-        posts,
+        mainNavigation,
       },
     };
   } catch {

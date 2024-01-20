@@ -1,0 +1,21 @@
+fragment mainNavigationFields on MainNavigation {
+  __typename
+  sys {
+    id
+    spaceId
+  }
+  title
+  subNavCollection(limit: 5, locale: $locale) {
+    items {
+      ...navigationElementFields
+    }
+  }
+}
+
+query mainNavigation($locale: String, $preview: Boolean) {
+  mainNavigationCollection(limit: 1, locale: $locale, preview: $preview) {
+    items {
+      ...mainNavigationFields
+    }
+  }
+}

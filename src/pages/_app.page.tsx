@@ -6,8 +6,6 @@ import './utils/globals.css';
 import '@contentful/live-preview/style.css';
 import { useRouter } from 'next/router';
 
-import { Layout } from '@src/components/templates/layout';
-
 const urbanist = Urbanist({ subsets: ['latin'], variable: '--font-urbanist' });
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -16,12 +14,11 @@ const App = ({ Component, pageProps }: AppProps) => {
     <ContentfulLivePreviewProvider
       enableInspectorMode={pageProps.previewActive}
       enableLiveUpdates={pageProps.previewActive}
-      locale={locale || 'en-US'}>
+      locale={locale || 'en-US'}
+    >
       <>
         <main className={`${urbanist.variable} font-sans`}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <Component {...pageProps} />
         </main>
         <div id="portal" className={`${urbanist.variable} font-sans`} />
       </>
